@@ -19,20 +19,129 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* 전체 앱 다크테마 강제 적용 */
+    .stApp {
+        background-color: #0E1117;
+        color: #FAFAFA;
+    }
+    
+    /* 사이드바 설정 */
     section[data-testid="stSidebar"] {
         width: 280px !important;
         min-width: 280px !important;
         max-width: 280px !important;
+        background-color: #262730;
     }
-    .stMetric { background-color: #f0f2f6; padding: 10px; border-radius: 5px; margin: 5px; }
-    .grade-card { padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .grade-a-plus { background: linear-gradient(135deg, #28a745, #20c997); color: #fff !important; border: 2px solid #28a745; }
-    .grade-a { background: linear-gradient(135deg, #5cb85c, #6bc97f); color: #fff !important; border: 2px solid #5cb85c; }
-    .grade-b-plus { background: linear-gradient(135deg, #ffc107, #ffcd38); color: #212529 !important; border: 2px solid #ffc107; }
-    .grade-b { background: linear-gradient(135deg, #ff9800, #ffa726); color: #fff !important; border: 2px solid #ff9800; }
-    .grade-c { background: linear-gradient(135deg, #dc3545, #e85d6c); color: #fff !important; border: 2px solid #dc3545; }
+    
+    /* 메트릭 카드 다크테마 */
+    .stMetric { 
+        background-color: #262730; 
+        padding: 10px; 
+        border-radius: 5px; 
+        margin: 5px;
+        border: 1px solid #444;
+    }
+    
+    /* 등급 카드 스타일 */
+    .grade-card { 
+        padding: 12px; 
+        border-radius: 8px; 
+        text-align: center; 
+        font-weight: bold; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
+        margin: 5px 0;
+    }
+    
+    /* 등급별 색상 */
+    .grade-a-plus { 
+        background: linear-gradient(135deg, #28a745, #20c997); 
+        color: #fff !important; 
+        border: 2px solid #28a745; 
+    }
+    .grade-a { 
+        background: linear-gradient(135deg, #5cb85c, #6bc97f); 
+        color: #fff !important; 
+        border: 2px solid #5cb85c; 
+    }
+    .grade-b-plus { 
+        background: linear-gradient(135deg, #ffc107, #ffcd38); 
+        color: #212529 !important; 
+        border: 2px solid #ffc107; 
+    }
+    .grade-b { 
+        background: linear-gradient(135deg, #ff9800, #ffa726); 
+        color: #fff !important; 
+        border: 2px solid #ff9800; 
+    }
+    .grade-c { 
+        background: linear-gradient(135deg, #dc3545, #e85d6c); 
+        color: #fff !important; 
+        border: 2px solid #dc3545; 
+    }
+    
+    /* 슬라이더 스타일 */
     .stSlider > div > div > div > div {
         background-image: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* 슬라이더 라벨 강제 표시 */
+    .stSlider {
+        padding: 0 20px;
+    }
+    
+    /* 텍스트 영역 다크테마 */
+    .stTextArea > div > div > textarea {
+        background-color: #262730;
+        color: #FAFAFA;
+        border: 1px solid #444;
+    }
+    
+    /* 텍스트 입력 다크테마 */
+    .stTextInput > div > div > input {
+        background-color: #262730;
+        color: #FAFAFA;
+        border: 1px solid #444;
+    }
+    
+    /* 셀렉트박스 다크테마 */
+    .stSelectbox > div > div > select {
+        background-color: #262730;
+        color: #FAFAFA;
+        border: 1px solid #444;
+    }
+    
+    /* 버튼 스타일 */
+    .stButton > button {
+        background-color: #FF6B6B;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    
+    /* 탭 스타일 */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #262730;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: #262730;
+        color: #FAFAFA;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #FF6B6B !important;
+        color: white !important;
+    }
+    
+    /* 데이터프레임 다크테마 */
+    .stDataFrame {
+        background-color: #262730;
+    }
+    
+    /* 경고/성공 메시지 다크테마 대응 */
+    .stAlert {
+        background-color: #262730;
+        border: 1px solid #444;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -827,6 +936,15 @@ def main():
             st.subheader("📅 분석 기간")
             months_map = {12:"1년", 24:"2년", 36:"3년", 48:"4년", 60:"5년",
                           72:"6년", 84:"7년", 96:"8년", 108:"9년", 120:"10년"}
+            
+            # 슬라이더 라벨 표시
+            st.markdown("""
+            <div style='display: flex; justify-content: space-between; margin-bottom: -10px; padding: 0 20px;'>
+                <small style='color: #888;'>1년</small>
+                <small style='color: #888;'>10년</small>
+            </div>
+            """, unsafe_allow_html=True)
+            
             months = st.select_slider(
                 "기간 선택",
                 options=list(months_map.keys()),
