@@ -19,149 +19,21 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* 사이드바 크기만 조정 */
     section[data-testid="stSidebar"] {
         width: 280px !important;
         min-width: 280px !important;
         max-width: 280px !important;
     }
-    
-    /* 메트릭 카드 약간의 그림자 효과 */
-    .stMetric { 
-        background-color: #f8f9fa; 
-        padding: 15px; 
-        border-radius: 8px; 
-        margin: 8px 0;
-        border: 1px solid #e9ecef;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    /* 추천순위 박스 개선 - 배포 환경 호환성 강화 */
-    .recommendation-box {
-        background: #ffffff !important;
-        padding: 20px;
-        border-radius: 12px;
-        margin: 15px 0;
-        border: 2px solid #e9ecef;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        color: #212529 !important;
-    }
-
-    .recommendation-box:hover {
-        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-        transform: translateY(-3px);
-        border-color: #dee2e6;
-    }
-
-    /* 박스 내부 메트릭 스타일 개선 */
-    .recommendation-box .stMetric {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        padding: 10px !important;
-        color: #212529 !important;
-    }
-    
-    /* 메트릭 내부 텍스트 색상 명시적 지정 */
-    .recommendation-box .stMetric > div {
-        color: #212529 !important;
-    }
-    
-    .recommendation-box .stMetric [data-testid="metric-container"] {
-        color: #212529 !important;
-    }
-    
-    .recommendation-box .stMetric [data-testid="metric-container"] > div {
-        color: #212529 !important;
-    }
-    
-    /* 등급 카드 개선 */
-    .grade-card { 
-        padding: 15px; 
-        border-radius: 10px; 
-        text-align: center; 
-        font-weight: bold; 
-        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        margin: 5px 0;
-        font-size: 14px;
-    }
-    
-    /* 등급별 색상 (기존 유지하되 더 부드럽게) */
-    .grade-a-plus { 
-        background: linear-gradient(135deg, #28a745, #20c997); 
-        color: #fff !important; 
-        border: none;
-    }
-    .grade-a { 
-        background: linear-gradient(135deg, #5cb85c, #6bc97f); 
-        color: #fff !important; 
-        border: none;
-    }
-    .grade-b-plus { 
-        background: linear-gradient(135deg, #ffc107, #ffcd38); 
-        color: #212529 !important; 
-        border: none;
-    }
-    .grade-b { 
-        background: linear-gradient(135deg, #ff9800, #ffa726); 
-        color: #fff !important; 
-        border: none;
-    }
-    .grade-c { 
-        background: linear-gradient(135deg, #dc3545, #e85d6c); 
-        color: #fff !important; 
-        border: none;
-    }
-    
-    /* 슬라이더 스타일 */
+    .stMetric { background-color: #f0f2f6; padding: 10px; border-radius: 5px; margin: 5px; }
+    .grade-card { padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .grade-a-plus { background: linear-gradient(135deg, #28a745, #20c997); color: #fff !important; border: 2px solid #28a745; }
+    .grade-a { background: linear-gradient(135deg, #5cb85c, #6bc97f); color: #fff !important; border: 2px solid #5cb85c; }
+    .grade-b-plus { background: linear-gradient(135deg, #ffc107, #ffcd38); color: #212529 !important; border: 2px solid #ffc107; }
+    .grade-b { background: linear-gradient(135deg, #ff9800, #ffa726); color: #fff !important; border: 2px solid #ff9800; }
+    .grade-c { background: linear-gradient(135deg, #dc3545, #e85d6c); color: #fff !important; border: 2px solid #dc3545; }
     .stSlider > div > div > div > div {
         background-image: linear-gradient(to right, #667eea 0%, #764ba2 100%);
     }
-    
-    /* 순위 숫자 스타일 */
-    .rank-number {
-        font-size: 24px;
-        font-weight: bold;
-        color: #495057;
-        margin-bottom: 5px;
-    }
-    
-    /* 키워드 이름 스타일 */
-    .keyword-name {
-        font-size: 18px;
-        font-weight: 600;
-        color: #212529;
-        margin-bottom: 10px;
-    }
-    
-    /* 메트릭 숫자 강조 */
-    .metric-value {
-        font-size: 16px;
-        font-weight: 600;
-        color: #495057;
-    }
-    
-    /* 성장률 색상 */
-    .growth-positive { color: #28a745; }
-    .growth-negative { color: #dc3545; }
-            
-
-    /* 배포 환경 호환성을 위한 추가 스타일 */
-    div[data-testid="stMetricValue"] {
-        color: #212529 !important;
-    }
-    
-    div[data-testid="stMetricLabel"] {
-        color: #666666 !important;
-    }
-    
-    /* 슬라이더 중복 라벨 방지 */
-    .slider-container {
-        margin-bottom: 20px;
-    }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -303,8 +175,8 @@ def parse_bulk_api_keys(text: str) -> dict:
         else:
             lines = [text.strip()]
     
-    #print(f"DEBUG: 분리된 라인들: {lines}")
-    #print(f"DEBUG: 라인 개수: {len(lines)}")
+    print(f"DEBUG: 분리된 라인들: {lines}")
+    print(f"DEBUG: 라인 개수: {len(lines)}")
     
     # key=value 형식인지 확인
     # key=value 형식인지 확인 (더 정확한 감지)
@@ -344,7 +216,7 @@ def parse_bulk_api_keys(text: str) -> dict:
                 value = lines[i].strip()
                 if value:
                     result[key] = value
-                    #print(f"DEBUG: {key} = {value}")
+                    print(f"DEBUG: {key} = {value}")
     
     # 키 별칭 처리 (기존과 동일)
     alias = {
@@ -368,7 +240,7 @@ def parse_bulk_api_keys(text: str) -> dict:
         if value and value.strip():
             final_result[normalized_key] = value.strip()
     
-    #print(f"DEBUG: 최종 결과: {final_result}")
+    print(f"DEBUG: 최종 결과: {final_result}")
     return final_result
 
 # ========================================
@@ -865,8 +737,8 @@ def main():
                     parsed = parse_bulk_api_keys(bulk_text)
                     
                     # 디버그 출력
-                    #st.write("**디버그: 파싱 결과**")
-                    #st.write(parsed)
+                    st.write("**디버그: 파싱 결과**")
+                    st.write(parsed)
                     
                     if not parsed:
                         st.error("❌ API 키를 인식할 수 없습니다. 입력 형식을 확인해주세요.")
@@ -955,23 +827,6 @@ def main():
             st.subheader("📅 분석 기간")
             months_map = {12:"1년", 24:"2년", 36:"3년", 48:"4년", 60:"5년",
                           72:"6년", 84:"7년", 96:"8년", 108:"9년", 120:"10년"}
-            
-            # 슬라이더 라벨 표시
-            st.markdown("""
-            <div style='display: flex; justify-content: space-between; margin-bottom: -10px; padding: 0 20px;'>
-                <small style='color: #888;'>1년</small>
-                <small style='color: #888;'>10년</small>
-            </div>
-            """, unsafe_allow_html=True)
-            
-# 슬라이더 라벨 표시
-            st.markdown("""
-            <div style='display: flex; justify-content: space-between; margin-bottom: -10px; padding: 0 20px;'>
-                <small style='color: #888;'>1년</small>
-                <small style='color: #888;'>10년</small>
-            </div>
-            """, unsafe_allow_html=True)
-            
             months = st.select_slider(
                 "기간 선택",
                 options=list(months_map.keys()),
@@ -1107,19 +962,10 @@ def main():
             st.subheader("🎯 TOP 5 추천 원료")
             for _, row in rec_df.head(5).iterrows():
                 grade_class = get_grade_class(row['등급'])
-                
-                # 기존 가로 배치 유지 + 카드 스타일 적용
-                st.markdown("""
-                <div class='recommendation-box'>
-                """, unsafe_allow_html=True)
-                
                 c1, c2, c3, c4, c5 = st.columns([1, 2, 2, 2, 2])
-                with c1: 
-                    st.metric("순위", f"#{int(row['순위'])}")
-                with c2: 
-                    st.metric("원료명", row['키워드'])
-                with c3: 
-                    st.metric("현재 검색량", f"{int(row['현재검색량']):,}회")
+                with c1: st.metric("순위", f"#{int(row['순위'])}")
+                with c2: st.metric("원료명", row['키워드'])
+                with c3: st.metric("현재 검색량", f"{int(row['현재검색량']):,}회")
                 with c4:
                     delta_color = "normal" if row['성장률(%)'] >= 0 else "inverse"
                     st.metric("성장률", f"{row['성장률(%)']:+.1f}%", delta_color=delta_color)
@@ -1130,8 +976,6 @@ def main():
                         <div style='font-size: 24px;'>{int(row['총점'])}점</div>
                     </div>
                     """, unsafe_allow_html=True)
-                
-                st.markdown("</div>", unsafe_allow_html=True)
                 st.markdown("---")
 
             st.subheader("📊 전체 순위")
