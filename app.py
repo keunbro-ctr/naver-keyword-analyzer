@@ -19,64 +19,75 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* 전체 앱 다크테마 강제 적용 */
-    .stApp {
-        background-color: #0E1117;
-        color: #FAFAFA;
-    }
-    
-    /* 사이드바 설정 */
+    /* 사이드바 크기만 조정 */
     section[data-testid="stSidebar"] {
         width: 280px !important;
         min-width: 280px !important;
         max-width: 280px !important;
-        background-color: #262730;
     }
     
-    /* 메트릭 카드 다크테마 */
+    /* 메트릭 카드 약간의 그림자 효과 */
     .stMetric { 
-        background-color: #262730; 
-        padding: 10px; 
-        border-radius: 5px; 
-        margin: 5px;
-        border: 1px solid #444;
+        background-color: #f8f9fa; 
+        padding: 15px; 
+        border-radius: 8px; 
+        margin: 8px 0;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     
-    /* 등급 카드 스타일 */
+    /* 추천순위 박스 개선 */
+    .recommendation-box {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 15px 0;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        transition: all 0.2s ease;
+    }
+    
+    .recommendation-box:hover {
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* 등급 카드 개선 */
     .grade-card { 
-        padding: 12px; 
-        border-radius: 8px; 
+        padding: 15px; 
+        border-radius: 10px; 
         text-align: center; 
         font-weight: bold; 
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         margin: 5px 0;
+        font-size: 14px;
     }
     
-    /* 등급별 색상 */
+    /* 등급별 색상 (기존 유지하되 더 부드럽게) */
     .grade-a-plus { 
         background: linear-gradient(135deg, #28a745, #20c997); 
         color: #fff !important; 
-        border: 2px solid #28a745; 
+        border: none;
     }
     .grade-a { 
         background: linear-gradient(135deg, #5cb85c, #6bc97f); 
         color: #fff !important; 
-        border: 2px solid #5cb85c; 
+        border: none;
     }
     .grade-b-plus { 
         background: linear-gradient(135deg, #ffc107, #ffcd38); 
         color: #212529 !important; 
-        border: 2px solid #ffc107; 
+        border: none;
     }
     .grade-b { 
         background: linear-gradient(135deg, #ff9800, #ffa726); 
         color: #fff !important; 
-        border: 2px solid #ff9800; 
+        border: none;
     }
     .grade-c { 
         background: linear-gradient(135deg, #dc3545, #e85d6c); 
         color: #fff !important; 
-        border: 2px solid #dc3545; 
+        border: none;
     }
     
     /* 슬라이더 스타일 */
@@ -84,65 +95,32 @@ st.markdown("""
         background-image: linear-gradient(to right, #667eea 0%, #764ba2 100%);
     }
     
-    /* 슬라이더 라벨 강제 표시 */
-    .stSlider {
-        padding: 0 20px;
+    /* 순위 숫자 스타일 */
+    .rank-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #495057;
+        margin-bottom: 5px;
     }
     
-    /* 텍스트 영역 다크테마 */
-    .stTextArea > div > div > textarea {
-        background-color: #262730;
-        color: #FAFAFA;
-        border: 1px solid #444;
+    /* 키워드 이름 스타일 */
+    .keyword-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 10px;
     }
     
-    /* 텍스트 입력 다크테마 */
-    .stTextInput > div > div > input {
-        background-color: #262730;
-        color: #FAFAFA;
-        border: 1px solid #444;
+    /* 메트릭 숫자 강조 */
+    .metric-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #495057;
     }
     
-    /* 셀렉트박스 다크테마 */
-    .stSelectbox > div > div > select {
-        background-color: #262730;
-        color: #FAFAFA;
-        border: 1px solid #444;
-    }
-    
-    /* 버튼 스타일 */
-    .stButton > button {
-        background-color: #FF6B6B;
-        color: white;
-        border: none;
-        border-radius: 5px;
-    }
-    
-    /* 탭 스타일 */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: #262730;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background-color: #262730;
-        color: #FAFAFA;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background-color: #FF6B6B !important;
-        color: white !important;
-    }
-    
-    /* 데이터프레임 다크테마 */
-    .stDataFrame {
-        background-color: #262730;
-    }
-    
-    /* 경고/성공 메시지 다크테마 대응 */
-    .stAlert {
-        background-color: #262730;
-        border: 1px solid #444;
-    }
+    /* 성장률 색상 */
+    .growth-positive { color: #28a745; }
+    .growth-negative { color: #dc3545; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -945,6 +923,14 @@ def main():
             </div>
             """, unsafe_allow_html=True)
             
+# 슬라이더 라벨 표시
+            st.markdown("""
+            <div style='display: flex; justify-content: space-between; margin-bottom: -10px; padding: 0 20px;'>
+                <small style='color: #888;'>1년</small>
+                <small style='color: #888;'>10년</small>
+            </div>
+            """, unsafe_allow_html=True)
+            
             months = st.select_slider(
                 "기간 선택",
                 options=list(months_map.keys()),
@@ -1078,23 +1064,43 @@ def main():
             rec_df = st.session_state['recommendations']
 
             st.subheader("🎯 TOP 5 추천 원료")
+            
             for _, row in rec_df.head(5).iterrows():
                 grade_class = get_grade_class(row['등급'])
-                c1, c2, c3, c4, c5 = st.columns([1, 2, 2, 2, 2])
-                with c1: st.metric("순위", f"#{int(row['순위'])}")
-                with c2: st.metric("원료명", row['키워드'])
-                with c3: st.metric("현재 검색량", f"{int(row['현재검색량']):,}회")
-                with c4:
-                    delta_color = "normal" if row['성장률(%)'] >= 0 else "inverse"
-                    st.metric("성장률", f"{row['성장률(%)']:+.1f}%", delta_color=delta_color)
-                with c5:
+                
+                # 전체를 하나의 박스로 감싸기
+                st.markdown(f"""
+                <div class='recommendation-box'>
+                    <div style='display: flex; align-items: center; justify-content: space-between;'>
+                        <div style='flex: 1;'>
+                            <div class='rank-number'>#{int(row['순위'])}</div>
+                            <div class='keyword-name'>{row['키워드']}</div>
+                        </div>
+                        <div style='text-align: right; flex: 1;'>
+                            <div style='margin-bottom: 8px;'>
+                                <span style='color: #6c757d; font-size: 14px;'>현재 검색량</span><br>
+                                <span class='metric-value'>{int(row['현재검색량']):,}회</span>
+                            </div>
+                            <div>
+                                <span style='color: #6c757d; font-size: 14px;'>성장률</span><br>
+                                <span class='metric-value {"growth-positive" if row["성장률(%)"] >= 0 else "growth-negative"}'>{row['성장률(%)']:+.1f}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # 등급은 별도로 표시
+                c1, c2, c3 = st.columns([1, 1, 1])
+                with c2:
                     st.markdown(f"""
-                    <div class='grade-card {grade_class}'>
+                    <div class='grade-card {grade_class}' style='margin-top: 10px;'>
                         <div style='font-size: 16px; margin-bottom: 5px;'>{row['등급']}</div>
                         <div style='font-size: 24px;'>{int(row['총점'])}점</div>
                     </div>
                     """, unsafe_allow_html=True)
-                st.markdown("---")
+                
+                st.markdown("<br>", unsafe_allow_html=True)  # 간격 조정
 
             st.subheader("📊 전체 순위")
             display_cols = ['순위', '키워드', '현재검색량', '성장률(%)', '총점', '등급']
