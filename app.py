@@ -36,15 +36,16 @@ st.markdown("""
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     
-    /* 추천순위 박스 개선 - 가로 배치에 맞게 조정 */
+    /* 추천순위 박스 개선 - 배포 환경 호환성 강화 */
     .recommendation-box {
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        background: #ffffff !important;
         padding: 20px;
         border-radius: 12px;
         margin: 15px 0;
-        border: 1px solid #e9ecef;
+        border: 2px solid #e9ecef;
         box-shadow: 0 4px 8px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
+        color: #212529 !important;
     }
 
     .recommendation-box:hover {
@@ -55,11 +56,25 @@ st.markdown("""
 
     /* 박스 내부 메트릭 스타일 개선 */
     .recommendation-box .stMetric {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        margin: 0;
-        padding: 10px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        color: #212529 !important;
+    }
+    
+    /* 메트릭 내부 텍스트 색상 명시적 지정 */
+    .recommendation-box .stMetric > div {
+        color: #212529 !important;
+    }
+    
+    .recommendation-box .stMetric [data-testid="metric-container"] {
+        color: #212529 !important;
+    }
+    
+    .recommendation-box .stMetric [data-testid="metric-container"] > div {
+        color: #212529 !important;
     }
     
     /* 등급 카드 개선 */
@@ -131,6 +146,22 @@ st.markdown("""
     /* 성장률 색상 */
     .growth-positive { color: #28a745; }
     .growth-negative { color: #dc3545; }
+            
+
+    /* 배포 환경 호환성을 위한 추가 스타일 */
+    div[data-testid="stMetricValue"] {
+        color: #212529 !important;
+    }
+    
+    div[data-testid="stMetricLabel"] {
+        color: #666666 !important;
+    }
+    
+    /* 슬라이더 중복 라벨 방지 */
+    .slider-container {
+        margin-bottom: 20px;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
