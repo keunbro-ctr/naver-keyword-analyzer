@@ -36,20 +36,30 @@ st.markdown("""
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     
-    /* 추천순위 박스 개선 */
+    /* 추천순위 박스 개선 - 가로 배치에 맞게 조정 */
     .recommendation-box {
-        background: white;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
         padding: 20px;
         border-radius: 12px;
         margin: 15px 0;
         border: 1px solid #e9ecef;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-        transition: all 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
     }
-    
+
     .recommendation-box:hover {
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        transform: translateY(-3px);
+        border-color: #dee2e6;
+    }
+
+    /* 박스 내부 메트릭 스타일 개선 */
+    .recommendation-box .stMetric {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 10px;
     }
     
     /* 등급 카드 개선 */
@@ -1064,43 +1074,34 @@ def main():
             rec_df = st.session_state['recommendations']
 
             st.subheader("🎯 TOP 5 추천 원료")
-            
             for _, row in rec_df.head(5).iterrows():
                 grade_class = get_grade_class(row['등급'])
                 
-                # 전체를 하나의 박스로 감싸기
-                st.markdown(f"""
+                # 기존 가로 배치 유지 + 카드 스타일 적용
+                st.markdown("""
                 <div class='recommendation-box'>
-                    <div style='display: flex; align-items: center; justify-content: space-between;'>
-                        <div style='flex: 1;'>
-                            <div class='rank-number'>#{int(row['순위'])}</div>
-                            <div class='keyword-name'>{row['키워드']}</div>
-                        </div>
-                        <div style='text-align: right; flex: 1;'>
-                            <div style='margin-bottom: 8px;'>
-                                <span style='color: #6c757d; font-size: 14px;'>현재 검색량</span><br>
-                                <span class='metric-value'>{int(row['현재검색량']):,}회</span>
-                            </div>
-                            <div>
-                                <span style='color: #6c757d; font-size: 14px;'>성장률</span><br>
-                                <span class='metric-value {"growth-positive" if row["성장률(%)"] >= 0 else "growth-negative"}'>{row['성장률(%)']:+.1f}%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 """, unsafe_allow_html=True)
                 
-                # 등급은 별도로 표시
-                c1, c2, c3 = st.columns([1, 1, 1])
-                with c2:
+                c1, c2, c3, c4, c5 = st.columns([1, 2, 2, 2, 2])
+                with c1: 
+                    st.metric("순위", f"#{int(row['순위'])}")
+                with c2: 
+                    st.metric("원료명", row['키워드'])
+                with c3: 
+                    st.metric("현재 검색량", f"{int(row['현재검색량']):,}회")
+                with c4:
+                    delta_color = "normal" if row['성장률(%)'] >= 0 else "inverse"
+                    st.metric("성장률", f"{row['성장률(%)']:+.1f}%", delta_color=delta_color)
+                with c5:
                     st.markdown(f"""
-                    <div class='grade-card {grade_class}' style='margin-top: 10px;'>
+                    <div class='grade-card {grade_class}'>
                         <div style='font-size: 16px; margin-bottom: 5px;'>{row['등급']}</div>
                         <div style='font-size: 24px;'>{int(row['총점'])}점</div>
                     </div>
                     """, unsafe_allow_html=True)
                 
-                st.markdown("<br>", unsafe_allow_html=True)  # 간격 조정
+                st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("---")
 
             st.subheader("📊 전체 순위")
             display_cols = ['순위', '키워드', '현재검색량', '성장률(%)', '총점', '등급']
