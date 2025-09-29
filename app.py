@@ -954,6 +954,20 @@ def main():
                 else:
                     st.write(f"- {key}: (비어있음)")
 
+        # 쿠키 저장 상태 확인 버튼
+        if st.button("🍪 쿠키 저장 상태 확인"):
+            st.write("**쿠키 테스트:**")
+            cookie_data = read_keys_from_cookie()
+            
+            if cookie_data and len(cookie_data) > 0:
+                st.success(f"✅ 쿠키에 {len(cookie_data)}개 키가 저장되어 있습니다")
+                st.write("저장된 키 목록:", list(cookie_data.keys()))
+            else:
+                st.error("❌ 쿠키에 저장된 키가 없습니다")
+                st.warning("CookieManager가 이 환경에서 작동하지 않거나, 아직 저장된 적이 없습니다.")
+            
+            st.info("브라우저 개발자 도구(F12 → Application → Cookies)에서 'naver_api_keys'를 직접 확인하세요.")
+
 
 
 
