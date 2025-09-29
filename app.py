@@ -992,7 +992,7 @@ def main():
         col1, col2 = st.columns([2, 1])
         with col1:
             keywords_text = st.text_area(
-                "키워드를 입력 (한 줄에 하나, 최대 30개)",
+                "키워드를 입력 (한 줄에 하나, 최대 100개)",
                 height=280,
                 placeholder="멜라토닌\n테아닌\n루테인\n밀크씨슬\n오메가3\n프로바이오틱스\n비타민D",
                 help="띄어쓰기는 자동 제거됩니다. 예: '밀크 씨슬' → '밀크씨슬'"
@@ -1028,9 +1028,9 @@ def main():
                 if not keywords:
                     st.error("⚠️ 키워드를 입력해주세요.")
                     st.stop()
-                if len(keywords) > 30:
-                    st.warning(f"⚠️ 30개를 초과한 키워드는 제외됩니다. ({len(keywords)}개 → 30개)")
-                    keywords = keywords[:30]
+                if len(keywords) > 100:
+                    st.warning(f"⚠️ 100개를 초과한 키워드는 제외됩니다. ({len(keywords)}개 → 100개)")
+                    keywords = keywords[:100]
                 if dropped:
                     st.info(f"ℹ️ 공백 제거 후 중복된 {len(dropped)}개 키워드는 자동 제외됨: {', '.join(sorted(set(dropped)))}")
 
