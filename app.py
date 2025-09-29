@@ -1,4 +1,5 @@
 import streamlit as st
+import extra_streamlit_components as stx
 import os, time, hmac, hashlib, base64, requests, json, math
 import pandas as pd
 import plotly.graph_objects as go
@@ -6,6 +7,39 @@ from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from typing import List, Dict
 import io
+
+
+
+# ========================================
+# 쿠키 관리 (브라우저 저장)
+# ========================================
+def _get_cookie_manager():
+    if "cookie_manager" not in st.session_state:
+        st.session_state.cookie_manager = stx.CookieManager()
+    return st.session_state.cookie_manager
+
+def read_keys_from_cookie():
+    """브라우저 쿠키에서 API 키 읽기 (없으면 {})"""
+    try:
+        cm = _get_cookie_manager()
+        raw = cm.get("naver_api_keys")
+        if raw:
+            return json.loads(raw)
+    except Exception:
+        pass
+    return {}
+
+def write_keys_to_cookie(keys: dict, days: int = 180):
+    """API 키를 브라우저 쿠키에 저장 (기본 180일)"""
+    cm = _get_cookie_manager()
+    expires_at = int(time.time()) + days * 24 * 60 * 60
+    cm.set("naver_api_keys", json.dumps(keys), expires_at=expires_at, key="save_keys_cookie")
+
+def delete_keys_cookie():
+    cm = _get_cookie_manager()
+    cm.delete("naver_api_keys", key="delete_keys_cookie")
+
+
 
 # ========================================
 # 페이지 & 공통 스타일
@@ -86,6 +120,19 @@ stored_keys = load_api_keys_from_file()
 for k in ["datalab_client_id","datalab_client_secret","ads_api_key","ads_secret","ads_customer_id"]:
     if k not in st.session_state:
         st.session_state[k] = stored_keys.get(k, "")
+
+
+# ========================================
+# 쿠키 → 세션 반영
+# ========================================
+cookie_keys = read_keys_from_cookie()
+if cookie_keys:
+    for k in ["datalab_client_id", "datalab_client_secret", "ads_api_key", "ads_secret", "ads_customer_id"]:
+        if cookie_keys.get(k):
+            st.session_state[k] = cookie_keys[k]
+
+
+
 
 # 입력 위젯 키 초기화
 input_keys = ["datalab_id_input", "datalab_secret_input", "ads_key_input", "ads_secret_input", "ads_cid_input"]
@@ -853,6 +900,7 @@ def main():
                     "ads_customer_id": st.session_state.get("ads_customer_id", "")
                 }
                 save_api_keys_to_file(api_keys_to_save)
+                write_keys_to_cookie(api_keys_to_save, days=180)
 
 
                 # 유효성 검사
