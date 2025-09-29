@@ -2,8 +2,8 @@ name: Wake up Streamlit App
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # 6시간마다 실행
-  workflow_dispatch:         # 수동 실행도 가능
+    - cron: "0 */8 * * *"   # 8시간마다 실행 (UTC)
+  workflow_dispatch:
 
 jobs:
   wakeup:
@@ -20,9 +20,15 @@ jobs:
 
       - name: Install Playwright
         run: |
-          npm install -g playwright
-          npx playwright install --with-deps
+          npm install playwright
 
       - name: Visit Streamlit App
         run: |
-          npx playwright codegen https://naver-keyword-analyzer-flrbl4hawduvplm6trhytg.streamlit.app --target=chromium --headless
+          node -e "const { chromium } = require('playwright'); \
+          (async () => { \
+            const browser = await chromium.launch({ headless: true }); \
+            const page = await browser.newPage(); \
+            await page.goto('https://naver-keyword-analyzer-flrbl4hawduvplm6trhytg.streamlit.app'); \
+            await page.waitForTimeout(15000); \
+            await browser.close(); \
+          })()"
