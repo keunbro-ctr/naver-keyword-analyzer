@@ -31,9 +31,15 @@ def read_keys_from_cookie():
 
 def write_keys_to_cookie(keys: dict, days: int = 180):
     """API 키를 브라우저 쿠키에 저장 (기본 180일)"""
-    cm = _get_cookie_manager()
-    expires_at = datetime.utcnow() + timedelta(days=days)
-    cm.set("naver_api_keys", json.dumps(keys), expires_at=expires_at, key="save_keys_cookie")
+    try:
+        cm = _get_cookie_manager()
+        expires_at = datetime.utcnow() + timedelta(days=days)
+        result = cm.set("naver_api_keys", json.dumps(keys), expires_at=expires_at, key="save_keys_cookie")
+        print(f"쿠키 저장 시도: {result}")  # 디버그용
+        return result
+    except Exception as e:
+        print(f"쿠키 저장 실패: {e}")
+        return False
 
 def delete_keys_cookie():
     cm = _get_cookie_manager()
