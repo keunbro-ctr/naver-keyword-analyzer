@@ -903,6 +903,28 @@ def main():
                 write_keys_to_cookie(api_keys_to_save, days=180)
 
 
+                # ========== 여기에 추가 ==========
+                st.write("---")
+                st.write("**쿠키 저장 확인:**")
+                
+                # 쿠키에서 다시 읽어보기
+                time.sleep(0.2)  # 쿠키 저장 대기
+                saved_cookies = read_keys_from_cookie()
+                
+                if saved_cookies:
+                    st.success(f"✅ 쿠키에 {len(saved_cookies)}개 키 저장됨")
+                    st.json({"저장된_키_목록": list(saved_cookies.keys())})
+                else:
+                    st.error("❌ 쿠키 저장 실패")
+                    st.warning("CookieManager가 이 환경에서 작동하지 않을 수 있습니다.")
+                
+                st.write("브라우저 개발자 도구(F12 → Application → Cookies)에서도 확인하세요.")
+                st.write("---")
+                # ========== 여기까지 ==========
+
+
+
+
                 # 유효성 검사
                 is_valid, msg = validate_api_keys()
                 if is_valid:
