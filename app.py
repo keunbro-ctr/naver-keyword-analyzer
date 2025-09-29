@@ -7,7 +7,7 @@ from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from typing import List, Dict
 import io
-
+from datetime import datetime, timedelta
 
 
 # ========================================
@@ -32,7 +32,7 @@ def read_keys_from_cookie():
 def write_keys_to_cookie(keys: dict, days: int = 180):
     """API 키를 브라우저 쿠키에 저장 (기본 180일)"""
     cm = _get_cookie_manager()
-    expires_at = int(time.time()) + days * 24 * 60 * 60
+    expires_at = datetime.utcnow() + timedelta(days=days)
     cm.set("naver_api_keys", json.dumps(keys), expires_at=expires_at, key="save_keys_cookie")
 
 def delete_keys_cookie():
