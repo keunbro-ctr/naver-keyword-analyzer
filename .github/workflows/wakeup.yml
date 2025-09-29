@@ -1,0 +1,28 @@
+name: Wake up Streamlit App
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # 6시간마다 실행
+  workflow_dispatch:         # 수동 실행도 가능
+
+jobs:
+  wakeup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Playwright
+        run: |
+          npm install -g playwright
+          npx playwright install --with-deps
+
+      - name: Visit Streamlit App
+        run: |
+          npx playwright codegen https://naver-keyword-analyzer-flrbl4hawduvplm6trhytg.streamlit.app --target=chromium --headless
